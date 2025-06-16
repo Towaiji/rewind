@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Camera, User, Trophy, MessageCircle } from 'lucide-react';
+import { Home, User } from 'lucide-react';
 
 interface TabBarProps {
   activeTab: string;
@@ -9,9 +9,6 @@ interface TabBarProps {
 export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
   const tabs = [
     { id: 'feed', icon: Home, label: 'Feed' },
-    { id: 'capture', icon: Camera, label: 'Capture' },
-    { id: 'stories', icon: MessageCircle, label: 'Stories' },
-    { id: 'achievements', icon: Trophy, label: 'Progress' },
     { id: 'profile', icon: User, label: 'Profile' },
   ];
 
