@@ -27,7 +27,7 @@ export default function DailyPrompt({ prompt, timeLeft, onSubmit }: DailyPromptP
   };
 
   return (
-    <div className="bg-gradient-to-br from-primary-50 to-orange-50 rounded-2xl p-6 mb-6 border border-primary-100">
+    <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl p-6 mb-6 border border-primary-100">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>

@@ -42,7 +42,7 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
           <div className="flex items-center gap-2 mb-2">
             <span className="font-medium text-gray-900">Your Memory</span>
             {memory.isLate && (
-              <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs rounded-full">
+              <span className="px-2 py-1 bg-primary-100 text-primary-600 text-xs rounded-full">
                 Late
               </span>
             )}
