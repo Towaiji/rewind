@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { todayPrompts } from "../data/mockData";
+import Header from "../components/Header";
 import { ScrollView } from "react-native";
 import { TextInput } from "react-native";
 
@@ -153,15 +154,6 @@ export default function RewindScreen() {
 }
 
 // Simple mobile Header (optional, or use your own)
-function Header({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <View style={{ alignItems: "center", marginBottom: 18 }}>
-      <Text style={{ fontSize: 26, fontWeight: "bold", color: "#18181b" }}>{title}</Text>
-      {subtitle && <Text style={{ fontSize: 14, color: "#818181" }}>{subtitle}</Text>}
-    </View>
-  );
-}
-
 // --- Styles ---
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f9fafb", paddingHorizontal: 16, paddingTop: 32 },
