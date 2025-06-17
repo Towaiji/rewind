@@ -5,7 +5,7 @@ import { todayPrompts } from "../data/mockData";
 import Header from "../components/Header";
 import { ScrollView } from "react-native";
 import { TextInput } from "react-native";
-import { useMemories } from "../context/MemoriesContext";
+import { useMemories } from "../../context/MemoriesContext";
 
 
 // --- DailyPrompt (Mobile Version) ---

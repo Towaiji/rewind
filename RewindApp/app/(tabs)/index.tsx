@@ -3,7 +3,7 @@ import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from "rea
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import { mockFriends } from "../data/mockData";
 import Header from "../components/Header";
-import { useMemories } from "../context/MemoriesContext";
+import { useMemories } from "../../context/MemoriesContext";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
