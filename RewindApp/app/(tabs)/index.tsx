@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from "rea
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import { mockMemories, mockFriends } from "../data/mockData";
 import Header from "../components/Header";
+import { useTheme } from "../contexts/ThemeContext";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
@@ -110,6 +111,8 @@ function MemoryCard({ memory }: { memory: any }) {
 
 export default function FeedScreen() {
   const [memories, setMemories] = useState(mockMemories);
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
@@ -166,14 +169,14 @@ function FriendsLeaderboard({ friends }: { friends: any[] }) {
 }
 
 // --- Styles ---
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", paddingHorizontal: 16, paddingTop: 32 },
-  leaderboardContainer: { backgroundColor: "#fff", borderRadius: 18, padding: 20, marginBottom: 16, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 1, borderWidth: 1, borderColor: "#f3f4f6" },
-  friendCard: { flexDirection: "row", alignItems: "center", padding: 12, backgroundColor: "#f3f4f6", borderRadius: 14, marginBottom: 8 },
+const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: c.background, paddingHorizontal: 16, paddingTop: 32 },
+  leaderboardContainer: { backgroundColor: c.card, borderRadius: 18, padding: 20, marginBottom: 16, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 1, borderWidth: 1, borderColor: c.border },
+  friendCard: { flexDirection: "row", alignItems: "center", padding: 12, backgroundColor: c.border, borderRadius: 14, marginBottom: 8 },
   avatar: { width: 40, height: 40, borderRadius: 20 },
   crownOverlay: { position: "absolute", top: -5, right: -5, backgroundColor: "#facc15", borderRadius: 10, width: 20, height: 20, alignItems: "center", justifyContent: "center" },
-  viewAllButton: { marginTop: 12, alignSelf: "stretch", alignItems: "center", paddingVertical: 10, borderRadius: 14, backgroundColor: "#f3f4f6" },
-  sectionTitle: { fontWeight: "bold", fontSize: 18, marginVertical: 10, color: "#18181b", marginLeft: 4, marginBottom: 14 },
+  viewAllButton: { marginTop: 12, alignSelf: "stretch", alignItems: "center", paddingVertical: 10, borderRadius: 14, backgroundColor: c.border },
+  sectionTitle: { fontWeight: "bold", fontSize: 18, marginVertical: 10, color: c.text, marginLeft: 4, marginBottom: 14 },
   // ---- MemoryCard Styles ----
   memoryCardOuter: {
     width: "100%",
@@ -181,7 +184,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   memoryCard: {
-    backgroundColor: "#fff",
+    backgroundColor: c.card,
     borderRadius: 16,
     padding: 18,
     shadowColor: "#000",
@@ -189,18 +192,18 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 1,
     borderWidth: 1,
-    borderColor: "#f3f4f6",
+    borderColor: c.border,
     maxWidth: 420,
     width: "100%",
   },
-  memoryPrompt: { marginBottom: 10, padding: 10, backgroundColor: "#f3f4f6", borderRadius: 12 },
-  memoryPromptText: { fontStyle: "italic", color: "#64748b", fontSize: 14 },
+  memoryPrompt: { marginBottom: 10, padding: 10, backgroundColor: c.border, borderRadius: 12 },
+  memoryPromptText: { fontStyle: "italic", color: c.secondaryText, fontSize: 14 },
   memoryAvatar: { width: 40, height: 40, backgroundColor: "#fb923c", borderRadius: 20, alignItems: "center", justifyContent: "center", marginRight: 10 },
   lateBadge: { backgroundColor: "#ffedd5", color: "#ea580c", paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, fontSize: 12, fontWeight: "600" },
   memoryMetaRow: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
   memoryMetaItem: { flexDirection: "row", alignItems: "center", marginRight: 12 },
-  memoryMetaText: { color: "#6b7280", marginLeft: 4, fontSize: 13 },
-  memoryContent: { color: "#262626", fontSize: 15, lineHeight: 22, marginTop: 2 },
+  memoryMetaText: { color: c.secondaryText, marginLeft: 4, fontSize: 13 },
+  memoryContent: { color: c.text, fontSize: 15, lineHeight: 22, marginTop: 2 },
   memoryVoiceBox: {
     backgroundColor: "#dbeafe",
     borderRadius: 12,
@@ -252,12 +255,12 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   memoryPhotoDescription: {
-    color: "#262626",
+    color: c.text,
     fontSize: 14,
     marginTop: 2,
     flexShrink: 1,
   },
-  memoryMoodRow: { marginTop: 14, borderTopWidth: 1, borderTopColor: "#f3f4f6", paddingTop: 8 },
-  memoryMoodText: { color: "#6b7280", fontSize: 13 },
+  memoryMoodRow: { marginTop: 14, borderTopWidth: 1, borderTopColor: c.border, paddingTop: 8 },
+  memoryMoodText: { color: c.secondaryText, fontSize: 13 },
 });
 

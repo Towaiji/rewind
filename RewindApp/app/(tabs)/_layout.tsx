@@ -1,19 +1,21 @@
 // (tabs)/_layout.tsx
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function TabsLayout() {
+  const { colors } = useTheme();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#fb5607",     // Orange highlight
-        tabBarInactiveTintColor: "#6b7280",   // Gray for inactive
-        tabBarShowLabel: false,               // No text under icon
+        tabBarActiveTintColor: colors.accent,
+        tabBarInactiveTintColor: colors.secondaryText,
+        tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#fff",
+          backgroundColor: colors.card,
           borderTopWidth: 1,
-          borderTopColor: "#f3f4f6",
+          borderTopColor: colors.border,
           height: 70,
         },
         tabBarItemStyle: {

@@ -5,6 +5,7 @@ import { todayPrompts } from "../data/mockData";
 import Header from "../components/Header";
 import { ScrollView } from "react-native";
 import { TextInput } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
 
 
 // --- DailyPrompt (Mobile Version) ---
@@ -12,6 +13,8 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
   const [inputType, setInputType] = useState<"text" | "voice" | "photo">("text");
   const [content, setContent] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -111,6 +114,8 @@ function PromptTypeButton({ icon, active, onPress, label }: any) {
 export default function RewindScreen() {
   const [timeLeft, setTimeLeft] = useState(18430);
   const [todayPrompt] = useState(todayPrompts[Math.floor(Math.random() * todayPrompts.length)]);
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
 
   useEffect(() => {
     const timer = setInterval(() => setTimeLeft((prev) => Math.max(0, prev - 1)), 1000);
@@ -155,27 +160,27 @@ export default function RewindScreen() {
 
 // Simple mobile Header (optional, or use your own)
 // --- Styles ---
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", paddingHorizontal: 16, paddingTop: 32 },
+const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: c.background, paddingHorizontal: 16, paddingTop: 32 },
   promptContainer: { backgroundColor: "#fff7ed", borderRadius: 18, padding: 18, marginVertical: 18, borderWidth: 1, borderColor: "#fee2b3" },
   promptHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 12 },
   pulseDot: { width: 8, height: 8, backgroundColor: "#f59e42", borderRadius: 4, marginRight: 6 },
   promptHeaderText: { fontSize: 14, color: "#f59e42", fontWeight: "bold" },
   promptTime: { fontSize: 14, color: "#f59e42", marginLeft: 6 },
-  promptTitle: { fontSize: 16, fontWeight: "bold", color: "#18181b", marginBottom: 12 },
+  promptTitle: { fontSize: 16, fontWeight: "bold", color: c.text, marginBottom: 12 },
   inputTypeRow: { flexDirection: "row", gap: 8, marginBottom: 10 },
   promptTypeButton: { flexDirection: "row", alignItems: "center", paddingVertical: 8, paddingHorizontal: 18, borderRadius: 12, marginRight: 8 },
   textAreaContainer: { marginBottom: 10 },
-  textArea: { backgroundColor: "#fff", borderRadius: 12, borderColor: "#ddd", borderWidth: 1, padding: 12, minHeight: 60, fontSize: 15, color: "#18181b" },
+  textArea: { backgroundColor: c.card, borderRadius: 12, borderColor: c.border, borderWidth: 1, padding: 12, minHeight: 60, fontSize: 15, color: c.text },
   shareButton: { marginTop: 6, backgroundColor: "#f59e42", paddingVertical: 13, borderRadius: 12, alignItems: "center" },
   voiceButton: { marginTop: 10, width: 80, height: 80, borderRadius: 40, alignItems: "center", justifyContent: "center" },
   photoButton: { marginTop: 10, width: 80, height: 80, borderRadius: 40, backgroundColor: "#f59e42", alignItems: "center", justifyContent: "center" },
 
-  card: { backgroundColor: "#fff", borderRadius: 20, padding: 24, alignItems: "center", marginBottom: 24, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 1, borderWidth: 1, borderColor: "#f3f4f6" },
+  card: { backgroundColor: c.card, borderRadius: 20, padding: 24, alignItems: "center", marginBottom: 24, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 1, borderWidth: 1, borderColor: c.border },
   iconCircleOrange: { width: 64, height: 64, borderRadius: 32, backgroundColor: "#fed7aa", alignItems: "center", justifyContent: "center", marginBottom: 16 },
   iconCircleBlue: { width: 64, height: 64, borderRadius: 32, backgroundColor: "#dbeafe", alignItems: "center", justifyContent: "center", marginBottom: 16 },
-  cardTitle: { fontSize: 18, fontWeight: "bold", color: "#18181b", marginBottom: 6 },
-  cardSubtitle: { color: "#64748b", marginBottom: 16, fontSize: 15, textAlign: "center" },
+  cardTitle: { fontSize: 18, fontWeight: "bold", color: c.text, marginBottom: 6 },
+  cardSubtitle: { color: c.secondaryText, marginBottom: 16, fontSize: 15, textAlign: "center" },
   cardButtonOrange: { backgroundColor: "#f59e42", paddingVertical: 12, paddingHorizontal: 28, borderRadius: 14 },
   cardButtonBlue: { backgroundColor: "#3b82f6", paddingVertical: 12, paddingHorizontal: 28, borderRadius: 14 },
 });
