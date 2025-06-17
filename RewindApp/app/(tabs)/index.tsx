@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import { mockMemories, mockFriends } from "../data/mockData";
+import Header from "../components/Header";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
@@ -127,15 +128,6 @@ export default function FeedScreen() {
 
 // ----- OTHER COMPONENTS -----
 
-function Header({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <View style={styles.header}>
-      <Text style={styles.headerTitle}>{title}</Text>
-      {subtitle && <Text style={styles.headerSubtitle}>{subtitle}</Text>}
-    </View>
-  );
-}
-
 function FriendsLeaderboard({ friends }: { friends: any[] }) {
   return (
     <View style={styles.leaderboardContainer}>
@@ -176,9 +168,6 @@ function FriendsLeaderboard({ friends }: { friends: any[] }) {
 // --- Styles ---
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f9fafb", paddingHorizontal: 16, paddingTop: 32 },
-  header: { alignItems: "center", marginBottom: 16 },
-  headerTitle: { fontSize: 26, fontWeight: "bold", color: "#18181b" },
-  headerSubtitle: { fontSize: 14, color: "#818181" },
   leaderboardContainer: { backgroundColor: "#fff", borderRadius: 18, padding: 20, marginBottom: 16, shadowColor: "#000", shadowOpacity: 0.06, shadowRadius: 8, elevation: 1, borderWidth: 1, borderColor: "#f3f4f6" },
   friendCard: { flexDirection: "row", alignItems: "center", padding: 12, backgroundColor: "#f3f4f6", borderRadius: 14, marginBottom: 8 },
   avatar: { width: 40, height: 40, borderRadius: 20 },

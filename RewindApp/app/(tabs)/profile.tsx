@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { mockUser, mockAchievements } from "../data/mockData";
+import Header from "../components/Header";
 
 // Profile Stats Card
 function ProfileStats({ user }: { user: any }) {
@@ -131,16 +132,6 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.settingsButton}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
       </View>
     </ScrollView>
-  );
-}
-
-// Simple header component
-function Header({ title, subtitle }: { title: string; subtitle?: string }) {
-  return (
-    <View style={{ alignItems: "center", marginBottom: 18 }}>
-      <Text style={{ fontSize: 26, fontWeight: "bold", color: "#18181b" }}>{title}</Text>
-      {subtitle && <Text style={{ fontSize: 14, color: "#818181" }}>{subtitle}</Text>}
-    </View>
   );
 }
 
