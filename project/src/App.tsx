@@ -7,12 +7,12 @@ import FriendsLeaderboard from './components/FriendsLeaderboard';
 import AchievementCard from './components/AchievementCard';
 import ProfileStats from './components/ProfileStats';
 import { Memory } from './types';
-import { 
-  mockMemories, 
-  mockFriends, 
-  mockAchievements, 
-  mockUser, 
-  todayPrompts 
+import {
+  mockMemories,
+  mockFriends,
+  mockAchievements,
+  mockUser,
+  todayPrompts
 } from './data/mockData';
 
 function App() {
@@ -47,6 +47,8 @@ function App() {
     switch (activeTab) {
       case 'feed':
         return 'Today';
+      case 'rewind':
+        return 'Rewind';
       case 'profile':
         return 'Profile';
       default:
@@ -58,6 +60,8 @@ function App() {
     switch (activeTab) {
       case 'feed':
         return 'Your memory timeline';
+      case 'rewind':
+        return 'Capture moments';
       case 'profile':
         return `${mockUser.streakDays} day streak`;
       default:
@@ -68,9 +72,25 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <Header title={getTabTitle()} subtitle={getTabSubtitle()} />
-      
+
       <div className="max-w-md mx-auto px-4 py-6">
+
         {activeTab === 'feed' && (
+          <div className="space-y-6">
+            <FriendsLeaderboard friends={mockFriends} />
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Memories</h3>
+              <div className="space-y-4">
+                {memories.map(memory => (
+                  <MemoryCard key={memory.id} memory={memory} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'rewind' && (
           <div className="space-y-6">
             <DailyPrompt
               prompt={todayPrompt}
@@ -100,20 +120,10 @@ function App() {
               </button>
             </div>
 
-            <FriendsLeaderboard friends={mockFriends} />
+            
 
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Memories</h3>
-              <div className="space-y-4">
-                {memories.map(memory => (
-                  <MemoryCard key={memory.id} memory={memory} />
-                ))}
-              </div>
-            </div>
           </div>
         )}
-
-
 
         {activeTab === 'profile' && (
           <div className="space-y-6">
@@ -148,7 +158,7 @@ function App() {
           </div>
         )}
       </div>
-      
+
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );

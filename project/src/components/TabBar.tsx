@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, User } from 'lucide-react';
+import { Home, User, History } from 'lucide-react';
 
 interface TabBarProps {
   activeTab: string;
@@ -9,6 +9,7 @@ interface TabBarProps {
 export default function TabBar({ activeTab, onTabChange }: TabBarProps) {
   const tabs = [
     { id: 'feed', icon: Home, label: 'Feed' },
+    { id: 'rewind', icon: History, label: 'Rewind' },
     { id: 'profile', icon: User, label: 'Profile' },
   ];
 
