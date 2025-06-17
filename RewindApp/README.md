@@ -27,7 +27,14 @@ You can start developing by editing the files inside the **app** directory. This
 
 ## Authentication
 
+<<<<<<< HEAD
 This project uses Firebase Authentication. The Firebase config is already set up in `firebase.ts`. Simply run `npm install` to install dependencies and start the app. You can create an account or log in using the provided screens.
+=======
+This project uses Firebase Authentication. The Firebase config is already set up in `firebase.ts`.
+When you run the app you will first see the **login** screen. Tap **Create account**
+to open the sign up screen. After signing in you will be taken to the main tabs.
+You can log out any time from the Profile tab.
+>>>>>>> 16b6e8bfca7e9590a8562124adfa88b30caa6b94
 
 ## Get a fresh project
 

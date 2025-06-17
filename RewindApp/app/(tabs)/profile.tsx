@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { mockUser, mockAchievements } from "../data/mockData";
 import Header from "../components/Header";
