@@ -7,24 +7,57 @@ import FriendsLeaderboard from './components/FriendsLeaderboard';
 import AchievementCard from './components/AchievementCard';
 import ProfileStats from './components/ProfileStats';
 import Auth from './components/Auth';
-import { Memory } from './types';
+import { Memory, User } from './types';
 import {
-  mockMemories,
   mockFriends,
   mockAchievements,
-  mockUser,
   todayPrompts
 } from './data/mockData';
 
-import { auth } from './firebase';
+import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut, type User as FirebaseUser } from 'firebase/auth';
+import { collection, addDoc, onSnapshot, doc, query, orderBy } from 'firebase/firestore';
 
 function App() {
   const [activeTab, setActiveTab] = useState('feed');
-  const [memories, setMemories] = useState<Memory[]>(mockMemories);
+  const [memories, setMemories] = useState<Memory[]>([]);
   const [timeLeft, setTimeLeft] = useState(18430); // 5 hours 7 minutes 10 seconds in seconds
   const [todayPrompt] = useState(todayPrompts[Math.floor(Math.random() * todayPrompts.length)]);
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [userProfile, setUserProfile] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    const unsubUser = onSnapshot(doc(db, 'users', user.uid), (snap) => {
+      const data = snap.data();
+      if (data) {
+        setUserProfile({
+          ...data,
+          joinDate: new Date(data.joinDate),
+        } as User);
+      }
+    });
+    const memQuery = query(
+      collection(db, 'users', user.uid, 'memories'),
+      orderBy('timestamp', 'desc')
+    );
+    const unsubMem = onSnapshot(memQuery, (snap) => {
+      setMemories(
+        snap.docs.map((d) => {
+          const data = d.data();
+          return {
+            ...(data as Omit<Memory, 'id' | 'timestamp'>),
+            id: d.id,
+            timestamp: data.timestamp.toDate ? data.timestamp.toDate() : new Date(),
+          } as Memory;
+        })
+      );
+    });
+    return () => {
+      unsubUser();
+      unsubMem();
+    };
+  }, [user]);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => setUser(u));
@@ -39,9 +72,9 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  const handlePromptSubmit = (content: string, type: 'text' | 'voice' | 'photo') => {
-    const newMemory: Memory = {
-      id: Date.now().toString(),
+  const handlePromptSubmit = async (content: string, type: 'text' | 'voice' | 'photo') => {
+    if (!user) return;
+    const newMemory: Omit<Memory, 'id'> = {
       content,
       timestamp: new Date(),
       type,
@@ -50,7 +83,8 @@ function App() {
       mood: 'Happy',
     };
 
-    setMemories(prev => [newMemory, ...prev]);
+    const docRef = await addDoc(collection(db, 'users', user.uid, 'memories'), newMemory);
+    setMemories(prev => [{ ...newMemory, id: docRef.id }, ...prev]);
   };
 
   const getTabTitle = () => {
@@ -73,7 +107,7 @@ function App() {
       case 'rewind':
         return 'Capture moments';
       case 'profile':
-        return `${mockUser.streakDays} day streak`;
+        return `${userProfile?.streakDays ?? 0} day streak`;
       default:
         return undefined;
     }
@@ -141,7 +175,7 @@ function App() {
 
         {activeTab === 'profile' && (
           <div className="space-y-6">
-            <ProfileStats user={mockUser} />
+            {userProfile && <ProfileStats user={userProfile} />}
 
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Progress</h3>

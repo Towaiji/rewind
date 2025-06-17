@@ -1,14 +1,4 @@
-import { Memory, Friend, Achievement, User } from '../types';
-
-export const mockUser: User = {
-  id: '1',
-  name: 'Alex Chen',
-  username: 'alexc',
-  avatar: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?w=150&h=150&fit=crop&crop=face',
-  streakDays: 23,
-  totalMemories: 156,
-  joinDate: new Date('2024-01-15'),
-};
+import { Memory, Friend, Achievement } from '../types';
 
 export const mockMemories: Memory[] = [
   {

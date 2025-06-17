@@ -1,6 +1,10 @@
 import React from 'react';
 import { Calendar, Target, Flame, Users } from 'lucide-react';
 import { User } from '../types';
+import { auth, storage, db } from '../firebase';
+import { updateProfile } from 'firebase/auth';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { doc, updateDoc } from 'firebase/firestore';
 
 interface ProfileStatsProps {
   user: User;
@@ -9,14 +13,27 @@ interface ProfileStatsProps {
 export default function ProfileStats({ user }: ProfileStatsProps) {
   const joinDays = Math.floor((new Date().getTime() - user.joinDate.getTime()) / (1000 * 60 * 60 * 24));
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !auth.currentUser) return;
+    const file = e.target.files[0];
+    const avatarRef = ref(storage, `avatars/${auth.currentUser.uid}`);
+    await uploadBytes(avatarRef, file);
+    const url = await getDownloadURL(avatarRef);
+    await updateProfile(auth.currentUser, { photoURL: url });
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), { avatar: url });
+  };
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center gap-4 mb-6">
-        <img
-          src={user.avatar}
-          alt={user.name}
-          className="w-16 h-16 rounded-full object-cover"
-        />
+        <label className="relative cursor-pointer" title="Change avatar">
+          <img
+            src={user.avatar}
+            alt={user.name}
+            className="w-16 h-16 rounded-full object-cover"
+          />
+          <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+        </label>
         <div>
           <h2 className="text-xl font-bold text-gray-900">{user.name}</h2>
           <p className="text-gray-500">@{user.username}</p>
