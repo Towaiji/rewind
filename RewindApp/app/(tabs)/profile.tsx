@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { mockUser, mockAchievements } from "../data/mockData";
 import Header from "../components/Header";
@@ -129,7 +131,7 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Notification Settings</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Export My Data</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Time Capsule</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.settingsButton}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsButton} onPress={() => signOut(auth)}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
       </View>
     </ScrollView>
   );
