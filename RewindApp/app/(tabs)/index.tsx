@@ -114,7 +114,6 @@ function MemoryCard({ memory }: { memory: any }) {
 }
 
 export default function FeedScreen() {
-  const [memories, setMemories] = useState(mockMemories);
   const { colors } = useTheme();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
   const { memories } = useMemories();
