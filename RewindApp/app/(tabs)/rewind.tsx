@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import { ScrollView } from "react-native";
 import { TextInput } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
+import { useMemories } from "../../context/MemoriesContext";
 
 
 // --- DailyPrompt (Mobile Version) ---
@@ -116,6 +117,7 @@ export default function RewindScreen() {
   const [todayPrompt] = useState(todayPrompts[Math.floor(Math.random() * todayPrompts.length)]);
   const { colors } = useTheme();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
+  const { addMemory } = useMemories();
 
   useEffect(() => {
     const timer = setInterval(() => setTimeLeft((prev) => Math.max(0, prev - 1)), 1000);
@@ -123,9 +125,7 @@ export default function RewindScreen() {
   }, []);
 
   const handlePromptSubmit = (content: string, type: "text" | "voice" | "photo") => {
-    // You can save this in state or connect to your backend
-    // For now, just console.log
-    console.log("New memory:", { content, type });
+    addMemory({ content, type, prompt: todayPrompt });
   };
 
   return (
