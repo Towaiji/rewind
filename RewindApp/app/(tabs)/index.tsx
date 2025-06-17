@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome5, Feather } from "@expo/vector-icons";
-import { mockMemories, mockFriends } from "../data/mockData";
+import { mockFriends } from "../data/mockData";
 import Header from "../components/Header";
+import { useMemories } from "../context/MemoriesContext";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
@@ -109,7 +110,7 @@ function MemoryCard({ memory }: { memory: any }) {
 }
 
 export default function FeedScreen() {
-  const [memories, setMemories] = useState(mockMemories);
+  const { memories } = useMemories();
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
