@@ -8,9 +8,10 @@ import { doc, updateDoc } from 'firebase/firestore';
 
 interface ProfileStatsProps {
   user: User;
+  onAvatarChange?: (url: string) => void;
 }
 
-export default function ProfileStats({ user }: ProfileStatsProps) {
+export default function ProfileStats({ user, onAvatarChange }: ProfileStatsProps) {
   const joinDays = Math.floor((new Date().getTime() - user.joinDate.getTime()) / (1000 * 60 * 60 * 24));
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,6 +22,7 @@ export default function ProfileStats({ user }: ProfileStatsProps) {
     const url = await getDownloadURL(avatarRef);
     await updateProfile(auth.currentUser, { photoURL: url });
     await updateDoc(doc(db, 'users', auth.currentUser.uid), { avatar: url });
+    onAvatarChange?.(url);
   };
 
   return (

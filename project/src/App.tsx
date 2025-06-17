@@ -26,6 +26,10 @@ function App() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<User | null>(null);
 
+  const handleAvatarUpdated = (url: string) => {
+    setUserProfile(prev => (prev ? { ...prev, avatar: url } : prev));
+  };
+
   useEffect(() => {
     if (!user) return;
     const unsubUser = onSnapshot(doc(db, 'users', user.uid), (snap) => {
@@ -175,7 +179,9 @@ function App() {
 
         {activeTab === 'profile' && (
           <div className="space-y-6">
-            {userProfile && <ProfileStats user={userProfile} />}
+            {userProfile && (
+              <ProfileStats user={userProfile} onAvatarChange={handleAvatarUpdated} />
+            )}
 
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Progress</h3>
