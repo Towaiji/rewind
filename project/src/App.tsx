@@ -6,6 +6,7 @@ import MemoryCard from './components/MemoryCard';
 import FriendsLeaderboard from './components/FriendsLeaderboard';
 import AchievementCard from './components/AchievementCard';
 import ProfileStats from './components/ProfileStats';
+import Auth from './components/Auth';
 import { Memory } from './types';
 import {
   mockMemories,
@@ -15,11 +16,20 @@ import {
   todayPrompts
 } from './data/mockData';
 
+import { auth } from './firebase';
+import { onAuthStateChanged, signOut, type User as FirebaseUser } from 'firebase/auth';
+
 function App() {
   const [activeTab, setActiveTab] = useState('feed');
   const [memories, setMemories] = useState<Memory[]>(mockMemories);
   const [timeLeft, setTimeLeft] = useState(18430); // 5 hours 7 minutes 10 seconds in seconds
   const [todayPrompt] = useState(todayPrompts[Math.floor(Math.random() * todayPrompts.length)]);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -68,6 +78,10 @@ function App() {
         return undefined;
     }
   };
+
+  if (!user) {
+    return <Auth />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
@@ -152,6 +166,12 @@ function App() {
                 </button>
                 <button className="w-full text-left py-3 px-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                   Time Capsule
+                </button>
+                <button
+                  onClick={() => signOut(auth)}
+                  className="w-full text-left py-3 px-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                >
+                  Log Out
                 </button>
               </div>
             </div>
