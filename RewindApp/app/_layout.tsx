@@ -2,15 +2,19 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
+import { MemoriesProvider } from "../context/MemoriesContext";
+import { mockMemories } from "./data/mockData";
 
 export default function RootLayout() {
   return (
-    <View style={styles.root}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </View>
+    <MemoriesProvider initial={mockMemories}>
+      <View style={styles.root}>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </View>
+    </MemoriesProvider>
   );
 }
 
