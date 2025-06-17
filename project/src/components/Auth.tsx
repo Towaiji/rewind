@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function Auth() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -16,7 +19,16 @@ export default function Auth() {
     setError('');
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: username });
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          name: username,
+          username,
+          avatar: 'https://www.gravatar.com/avatar?d=mp',
+          streakDays: 0,
+          totalMemories: 0,
+          joinDate: new Date().toISOString(),
+        });
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
@@ -35,6 +47,16 @@ export default function Auth() {
           {isSignUp ? 'Create Account' : 'Log In'}
         </h2>
         {error && <p className="text-red-500 text-sm">{error}</p>}
+        {isSignUp && (
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none"
+            required
+          />
+        )}
         <input
           type="email"
           value={email}
