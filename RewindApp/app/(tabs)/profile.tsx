@@ -3,9 +3,12 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StyleSheet } from "rea
 import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { mockUser, mockAchievements } from "../data/mockData";
 import Header from "../components/Header";
+import { useTheme } from "../contexts/ThemeContext";
 
 // Profile Stats Card
 function ProfileStats({ user }: { user: any }) {
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   const joinDays = Math.floor((Date.now() - new Date(user.joinDate).getTime()) / (1000 * 60 * 60 * 24));
 
   return (
@@ -69,6 +72,8 @@ function ProfileStats({ user }: { user: any }) {
 function AchievementCard({ achievement }: { achievement: any }) {
   const progressPercentage = (achievement.progress / achievement.total) * 100;
   const completed = achievement.completed;
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
     <View style={[
       styles.achievementCard,
@@ -110,6 +115,8 @@ function AchievementCard({ achievement }: { achievement: any }) {
 }
 
 export default function ProfileScreen() {
+  const { colors, toggleTheme } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
       <Header title="Profile" subtitle={`${mockUser.streakDays} day streak`} />
@@ -129,45 +136,46 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Notification Settings</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Export My Data</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Time Capsule</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsButton} onPress={toggleTheme}><Text style={styles.settingsButtonText}>Toggle Theme</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb", paddingHorizontal: 16, paddingTop: 32 },
+const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: c.background, paddingHorizontal: 16, paddingTop: 32 },
 
   // Profile Card
-  profileStatsCard: { backgroundColor: "#fff", borderRadius: 20, padding: 22, marginBottom: 26, borderColor: "#f3f4f6", borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
+  profileStatsCard: { backgroundColor: c.card, borderRadius: 20, padding: 22, marginBottom: 26, borderColor: c.border, borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
   profileHeaderRow: { flexDirection: "row", alignItems: "center", marginBottom: 16 },
   profileAvatar: { width: 64, height: 64, borderRadius: 32, marginRight: 18 },
-  profileName: { fontSize: 20, fontWeight: "bold", color: "#18181b" },
-  profileUsername: { color: "#6b7280", fontSize: 14 },
+  profileName: { fontSize: 20, fontWeight: "bold", color: c.text },
+  profileUsername: { color: c.secondaryText, fontSize: 14 },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", marginBottom: 20 },
   statsCell: { width: "47%", borderRadius: 14, alignItems: "center", paddingVertical: 15, marginBottom: 10 },
   statsNumber: { fontSize: 22, fontWeight: "bold", marginTop: 5, marginBottom: 1 },
   statsLabel: { fontSize: 13, fontWeight: "600" },
 
   // Wrap
-  profileWrap: { marginTop: 10, borderTopColor: "#f3f4f6", borderTopWidth: 1, paddingTop: 16 },
+  profileWrap: { marginTop: 10, borderTopColor: c.border, borderTopWidth: 1, paddingTop: 16 },
   wrapHeaderRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
   wrapHeader: { fontSize: 14, fontWeight: "600", color: "#374151" },
   wrapViewAll: { color: "#6366f1", fontSize: 14, fontWeight: "600" },
   wrapRow: { flexDirection: "row", justifyContent: "space-between" },
-  wrapLabel: { color: "#64748b", fontSize: 13 },
-  wrapValue: { fontWeight: "bold", color: "#18181b", fontSize: 13 },
+  wrapLabel: { color: c.secondaryText, fontSize: 13 },
+  wrapValue: { fontWeight: "bold", color: c.text, fontSize: 13 },
 
   // Progress/Achievements
-  progressTitle: { fontWeight: "bold", fontSize: 18, marginVertical: 18, color: "#18181b" },
-  achievementCard: { backgroundColor: "#fff", borderRadius: 16, padding: 16, marginBottom: 16, borderColor: "#f3f4f6", borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
+  progressTitle: { fontWeight: "bold", fontSize: 18, marginVertical: 18, color: c.text },
+  achievementCard: { backgroundColor: c.card, borderRadius: 16, padding: 16, marginBottom: 16, borderColor: c.border, borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
   achievementIcon: { padding: 12, borderRadius: 12, marginRight: 10, alignItems: "center", justifyContent: "center" },
   achievementBarBg: { width: "100%", height: 7, backgroundColor: "#e5e7eb", borderRadius: 6, overflow: "hidden", marginTop: 4 },
   achievementBar: { height: 7, borderRadius: 6 },
 
   // Settings
-  settingsCard: { backgroundColor: "#fff", borderRadius: 20, padding: 20, marginTop: 20, borderColor: "#f3f4f6", borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
-  settingsTitle: { fontSize: 18, fontWeight: "bold", color: "#18181b", marginBottom: 10 },
-  settingsButton: { paddingVertical: 14, borderRadius: 12, marginBottom: 4, backgroundColor: "#f9fafb" },
-  settingsButtonText: { color: "#374151", fontWeight: "600", fontSize: 15 },
+  settingsCard: { backgroundColor: c.card, borderRadius: 20, padding: 20, marginTop: 20, borderColor: c.border, borderWidth: 1, shadowColor: "#000", shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
+  settingsTitle: { fontSize: 18, fontWeight: "bold", color: c.text, marginBottom: 10 },
+  settingsButton: { paddingVertical: 14, borderRadius: 12, marginBottom: 4, backgroundColor: c.background },
+  settingsButtonText: { color: c.text, fontWeight: "600", fontSize: 15 },
 });
