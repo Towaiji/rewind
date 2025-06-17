@@ -25,6 +25,13 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Authentication
+
+This project uses Firebase Authentication. The Firebase config is already set up in `firebase.ts`.
+When you run the app you will first see the **login** screen. Tap **Create account**
+to open the sign up screen. After signing in you will be taken to the main tabs.
+You can log out any time from the Profile tab.
+
 ## Get a fresh project
 
 When you're ready, run:
