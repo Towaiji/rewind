@@ -30,6 +30,15 @@ export const mockMemories: Memory[] = [
     mood: 'Energized',
   },
   {
+    id: '3',
+    content: 'Beautiful sunset from the rooftop',
+    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    type: 'photo',
+    isLate: true,
+    location: 'Home',
+    mood: 'Peaceful',
+  },
+  {
     id: '4',
     content: 'Finally finished reading "Atomic Habits". The compound effect of small changes is mind-blowing. Time to implement what I learned!',
     timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
