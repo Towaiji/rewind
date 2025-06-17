@@ -9,8 +9,8 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="feed" options={{ title: "Feed" }} />
-      <Tabs.Screen name="rewind" options={{ title: "Rewind" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen name="rewind" options={{ title: "Rewind" }} />
     </Tabs>
   );
 }
