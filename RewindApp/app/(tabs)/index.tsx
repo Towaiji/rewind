@@ -7,6 +7,9 @@ import { useTheme } from "../contexts/ThemeContext";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
+
   const getTypeIcon = () => {
     switch (memory.type) {
       case "voice":
@@ -132,6 +135,8 @@ export default function FeedScreen() {
 // ----- OTHER COMPONENTS -----
 
 function FriendsLeaderboard({ friends }: { friends: any[] }) {
+  const { colors } = useTheme();
+  const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
     <View style={styles.leaderboardContainer}>
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>

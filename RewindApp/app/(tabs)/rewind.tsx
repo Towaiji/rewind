@@ -44,9 +44,9 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       </View>
       <Text style={styles.promptTitle}>{prompt}</Text>
       <View style={styles.inputTypeRow}>
-        <PromptTypeButton icon={<Feather name="type" size={16} />} active={inputType === "text"} onPress={() => setInputType("text")} label="Text" />
-        <PromptTypeButton icon={<Feather name="mic" size={16} />} active={inputType === "voice"} onPress={() => setInputType("voice")} label="Voice" />
-        <PromptTypeButton icon={<Feather name="camera" size={16} />} active={inputType === "photo"} onPress={() => setInputType("photo")} label="Photo" />
+        <PromptTypeButton styles={styles} icon={<Feather name="type" size={16} />} active={inputType === "text"} onPress={() => setInputType("text")} label="Text" />
+        <PromptTypeButton styles={styles} icon={<Feather name="mic" size={16} />} active={inputType === "voice"} onPress={() => setInputType("voice")} label="Voice" />
+        <PromptTypeButton styles={styles} icon={<Feather name="camera" size={16} />} active={inputType === "photo"} onPress={() => setInputType("photo")} label="Photo" />
       </View>
       {inputType === "text" && (
         <View>
@@ -94,7 +94,7 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
   );
 }
 
-function PromptTypeButton({ icon, active, onPress, label }: any) {
+function PromptTypeButton({ styles, icon, active, onPress, label }: any) {
   return (
     <TouchableOpacity
       onPress={onPress}
