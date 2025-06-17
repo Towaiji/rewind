@@ -23,7 +23,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="feed"
+        name="index"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
