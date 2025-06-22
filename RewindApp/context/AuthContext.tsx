@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '../app/lib/supabase';
+import { router } from 'expo-router';
 
 interface AuthContextValue {
   session: Session | null;
@@ -40,7 +41,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     session,
     signIn: (email, password) => supabase.auth.signInWithPassword({ email, password }),
     signUp: (email, password) => supabase.auth.signUp({ email, password }),
-    signOut: async () => { await supabase.auth.signOut(); },
+    signOut: async () => {
+      await supabase.auth.signOut();
+      setSession(null);
+      router.replace('/login');
+    },
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

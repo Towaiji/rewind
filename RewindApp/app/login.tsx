@@ -22,6 +22,7 @@ export default function LoginScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Welcome to Rewind</Text>
       <TextInput
         style={[styles.input, { borderColor: colors.border, color: colors.text }]}
         placeholder="Email"
@@ -38,7 +39,7 @@ export default function LoginScreen() {
         value={password}
         onChangeText={setPassword}
       />
-      <Button title="Log In" onPress={handleLogin} />
+      <Button title="Log In" onPress={handleLogin} color={colors.accent} />
       <TouchableOpacity onPress={() => router.push('/signup')}>
         <Text style={styles.link}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
@@ -47,7 +48,8 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  input: { borderWidth: 1, borderRadius: 8, padding: 12, marginBottom: 12 },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
+  input: { borderWidth: 1, borderRadius: 8, padding: 12, marginBottom: 12, width: '100%' },
   link: { marginTop: 16, textAlign: 'center', color: '#2563eb' },
 });
