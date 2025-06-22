@@ -4,6 +4,7 @@ import { View, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import { MemoriesProvider } from "../context/MemoriesContext";
+import { AuthProvider } from "../context/AuthContext";
 import { mockMemories } from "./data/mockData";
 
 function Layout() {
@@ -13,6 +14,8 @@ function Layout() {
       <View style={[styles.root, { backgroundColor: colors.background }]}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="signup" />
           <Stack.Screen name="+not-found" />
         </Stack>
       </View>
@@ -22,9 +25,11 @@ function Layout() {
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <Layout />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <Layout />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

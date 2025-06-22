@@ -4,6 +4,7 @@ import { Feather, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icon
 import { mockUser, mockAchievements } from "../data/mockData";
 import Header from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
 
 // Profile Stats Card
 function ProfileStats({ user }: { user: any }) {
@@ -116,6 +117,7 @@ function AchievementCard({ achievement }: { achievement: any }) {
 
 export default function ProfileScreen() {
   const { colors, toggleTheme } = useTheme();
+  const { signOut } = useAuth();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
@@ -137,7 +139,7 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Export My Data</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton}><Text style={styles.settingsButtonText}>Time Capsule</Text></TouchableOpacity>
         <TouchableOpacity style={styles.settingsButton} onPress={toggleTheme}><Text style={styles.settingsButtonText}>Toggle Theme</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.settingsButton}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.settingsButton} onPress={signOut}><Text style={[styles.settingsButtonText, { color: "#ef4444" }]}>Log Out</Text></TouchableOpacity>
       </View>
     </ScrollView>
   );
