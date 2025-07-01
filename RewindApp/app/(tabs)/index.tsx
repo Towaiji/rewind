@@ -5,12 +5,21 @@ import { mockFriends } from "../data/mockData";
 import Header from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
 import { useMemories } from "../../context/MemoriesContext";
+import { Audio } from "expo-av";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
   const { colors } = useTheme();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
   const [showPhoto, setShowPhoto] = React.useState(false);
+  const [sound, setSound] = React.useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+
+  React.useEffect(() => {
+    return () => {
+      sound?.unloadAsync();
+    };
+  }, [sound]);
 
   const getTypeIcon = () => {
     switch (memory.type) {
@@ -31,6 +40,35 @@ function MemoryCard({ memory }: { memory: any }) {
     if (hours < 24) return `${hours}h ago`;
     return new Date(date).toLocaleDateString();
   };
+
+  const togglePlayback = async () => {
+    try {
+      if (isPlaying) {
+        await sound?.pauseAsync();
+        setIsPlaying(false);
+        return;
+      }
+
+      if (!sound) {
+        const { sound: snd } = await Audio.Sound.createAsync({ uri: memory.content });
+        setSound(snd);
+        snd.setOnPlaybackStatusUpdate((status) => {
+          if (!status.isLoaded) return;
+          if (status.didJustFinish) {
+            setIsPlaying(false);
+          }
+        });
+        await snd.playAsync();
+        setIsPlaying(true);
+      } else {
+        await sound.playAsync();
+        setIsPlaying(true);
+      }
+    } catch (e) {
+      console.error('Audio playback error', e);
+    }
+  };
+
 
   return (
     <View style={styles.memoryCardOuter}>
@@ -77,13 +115,15 @@ function MemoryCard({ memory }: { memory: any }) {
         )}
 
         {memory.type === "voice" && (
-          <TouchableOpacity style={styles.memoryVoiceBox} onPress={() => { }}>
+         <TouchableOpacity style={styles.memoryVoiceBox} onPress={togglePlayback}>
             <View style={styles.memoryVoiceIcon}>
               <Feather name="mic" size={20} color="#fff" />
             </View>
             <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={styles.memoryVoiceTitle}>Voice Memory</Text>
-              <Text style={styles.memoryVoiceSubtitle}>Tap to listen</Text>
+              <Text style={styles.memoryVoiceSubtitle}>
+                {isPlaying ? "Playing..." : "Tap to listen"}
+              </Text>
             </View>
           </TouchableOpacity>
         )}

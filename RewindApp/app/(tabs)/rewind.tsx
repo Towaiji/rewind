@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { Audio } from "expo-av";
 import { todayPrompts } from "../data/mockData";
 import Header from "../components/Header";
 import { ScrollView } from "react-native";
@@ -14,6 +15,7 @@ import { useMemories } from "../../context/MemoriesContext";
 function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft: number; onSubmit: (content: string, type: "text" | "voice" | "photo") => void }) {
   const [inputType, setInputType] = useState<"text" | "voice" | "photo">("text");
   const [content, setContent] = useState("");
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const { colors } = useTheme();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
@@ -31,6 +33,38 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       setContent("");
     }
   };
+
+  const startRecording = async () => {
+    try {
+      const { status } = await Audio.requestPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission required", "Microphone permission is needed to record audio.");
+        return;
+      }
+      await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
+      const rec = new Audio.Recording();
+      await rec.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+      await rec.startAsync();
+      setRecording(rec);
+      setIsRecording(true);
+    } catch (e) {
+      console.error("Failed to start recording", e);
+    }
+  };
+
+  const stopRecording = async () => {
+    try {
+      if (!recording) return;
+      await recording.stopAndUnloadAsync();
+      const uri = recording.getURI();
+      setIsRecording(false);
+      setRecording(null);
+      if (uri) onSubmit(uri, "voice");
+    } catch (e) {
+      console.error("Failed to stop recording", e);
+    }
+  };
+
 
   const handlePhotoSelect = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -100,7 +134,13 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       {inputType === "voice" && (
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
-            onPress={() => setIsRecording(!isRecording)}
+            onPress={() => {
+              if (isRecording) {
+                stopRecording();
+              } else {
+                startRecording();
+              }
+            }}
             style={[
               styles.voiceButton,
               isRecording ? { backgroundColor: "#ef4444" } : { backgroundColor: "#f59e42" }
