@@ -76,7 +76,7 @@ function MemoryCard({ memory }: { memory: any }) {
         )}
 
         {memory.type === "voice" && (
-          <TouchableOpacity style={styles.memoryVoiceBox} onPress={() => {}}>
+          <TouchableOpacity style={styles.memoryVoiceBox} onPress={() => { }}>
             <View style={styles.memoryVoiceIcon}>
               <Feather name="mic" size={20} color="#fff" />
             </View>
@@ -88,16 +88,17 @@ function MemoryCard({ memory }: { memory: any }) {
         )}
 
         {memory.type === "photo" && (
-          <TouchableOpacity style={styles.memoryPhotoBox} onPress={() => {}}>
-            <View style={styles.memoryPhotoPreview}>
-              <Feather name="image" size={28} color="#fff" />
-            </View>
+          <TouchableOpacity style={styles.memoryPhotoBox} onPress={() => { }}>
+            {memory.content ? (
+              <Image source={{ uri: memory.content }} style={styles.memoryPhotoPreviewImage} />
+            ) : (
+              <View style={styles.memoryPhotoPreview}>
+                <Feather name="image" size={28} color="#fff" />
+              </View>
+            )}
             <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={styles.memoryPhotoTitle}>Photo Memory</Text>
               <Text style={styles.memoryPhotoSubtitle}>Tap to view</Text>
-              {memory.content ? (
-                <Text style={styles.memoryPhotoDescription}>{memory.content}</Text>
-              ) : null}
             </View>
           </TouchableOpacity>
         )}
@@ -250,6 +251,12 @@ const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.crea
     justifyContent: "center",
     marginRight: 12,
   },
+  memoryPhotoPreviewImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    marginRight: 12,
+  },
   memoryPhotoTitle: {
     color: "#065f46",
     fontWeight: "bold",
@@ -259,12 +266,6 @@ const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.crea
     color: "#16a34a",
     fontSize: 13,
     marginBottom: 2,
-  },
-  memoryPhotoDescription: {
-    color: c.text,
-    fontSize: 14,
-    marginTop: 2,
-    flexShrink: 1,
   },
   memoryMoodRow: { marginTop: 14, borderTopWidth: 1, borderTopColor: c.border, paddingTop: 8 },
   memoryMoodText: { color: c.secondaryText, fontSize: 13 },

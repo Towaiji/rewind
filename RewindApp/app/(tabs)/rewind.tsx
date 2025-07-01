@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import { todayPrompts } from "../data/mockData";
 import Header from "../components/Header";
 import { ScrollView } from "react-native";
@@ -29,6 +30,35 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       onSubmit(content, inputType);
       setContent("");
     }
+  };
+
+  const handlePhotoSelect = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission required", "Camera permission is needed to add photos.");
+      return;
+    }
+    Alert.alert("Add Photo", "Choose source", [
+      {
+        text: "Camera",
+        onPress: async () => {
+          const res = await ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.7 });
+          if (!res.canceled) {
+            onSubmit(res.assets[0].uri, "photo");
+          }
+        },
+      },
+      {
+        text: "Gallery",
+        onPress: async () => {
+          const res = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 0.7 });
+          if (!res.canceled) {
+            onSubmit(res.assets[0].uri, "photo");
+          }
+        },
+      },
+      { text: "Cancel", style: "cancel" },
+    ]);
   };
 
   return (
@@ -85,10 +115,10 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       )}
       {inputType === "photo" && (
         <View style={{ alignItems: "center" }}>
-          <TouchableOpacity style={styles.photoButton} onPress={handleShare}>
+          <TouchableOpacity style={styles.photoButton} onPress={handlePhotoSelect}>
             <Feather name="camera" size={32} color="#fff" />
           </TouchableOpacity>
-          <Text style={{ color: "#888", marginTop: 8 }}>Tap to take a photo</Text>
+          <Text style={{ color: "#888", marginTop: 8 }}>Tap to add a photo</Text>
         </View>
       )}
     </View>
