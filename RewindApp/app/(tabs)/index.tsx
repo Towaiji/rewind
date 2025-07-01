@@ -52,10 +52,12 @@ function MemoryCard({ memory }: { memory: any }) {
       if (!sound) {
         const { sound: snd } = await Audio.Sound.createAsync({ uri: memory.content });
         setSound(snd);
-        snd.setOnPlaybackStatusUpdate((status) => {
+        snd.setOnPlaybackStatusUpdate(async (status) => {
           if (!status.isLoaded) return;
           if (status.didJustFinish) {
             setIsPlaying(false);
+            await snd.unloadAsync();
+            setSound(null);
           }
         });
         await snd.playAsync();
@@ -77,7 +79,7 @@ function MemoryCard({ memory }: { memory: any }) {
         
       }
     } catch (e) {
-      console.error('Audio playback error', e);
+      console.error("Audio playback error", e);
     }
   };
 
