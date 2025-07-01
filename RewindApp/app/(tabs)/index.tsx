@@ -43,11 +43,11 @@ function MemoryCard({ memory }: { memory: any }) {
 
   const togglePlayback = async () => {
     try {
-      if (isPlaying) {
-        await sound?.pauseAsync();
-        setIsPlaying(false);
-        return;
-      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        playThroughEarpieceAndroid: false,
+      });
 
       if (!sound) {
         const { sound: snd } = await Audio.Sound.createAsync({ uri: memory.content });
@@ -60,9 +60,21 @@ function MemoryCard({ memory }: { memory: any }) {
         });
         await snd.playAsync();
         setIsPlaying(true);
+        return;
+      }
+
+      const status = await sound.getStatusAsync();
+
+      if (status.isLoaded && status.didJustFinish) {
+        await sound.replayAsync();
+        setIsPlaying(true);
+      } else if (isPlaying) {
+        await sound.pauseAsync();
+        setIsPlaying(false);
       } else {
         await sound.playAsync();
         setIsPlaying(true);
+        
       }
     } catch (e) {
       console.error('Audio playback error', e);

@@ -59,6 +59,11 @@ function DailyPrompt({ prompt, timeLeft, onSubmit }: { prompt: string; timeLeft:
       const uri = recording.getURI();
       setIsRecording(false);
       setRecording(null);
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        playThroughEarpieceAndroid: false,
+      });
       if (uri) onSubmit(uri, "voice");
     } catch (e) {
       console.error("Failed to stop recording", e);
