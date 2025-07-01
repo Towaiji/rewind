@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Modal } from "react-native";
 import { FontAwesome5, Feather } from "@expo/vector-icons";
 import { mockFriends } from "../data/mockData";
 import Header from "../components/Header";
@@ -10,6 +10,7 @@ import { useMemories } from "../../context/MemoriesContext";
 function MemoryCard({ memory }: { memory: any }) {
   const { colors } = useTheme();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
+  const [showPhoto, setShowPhoto] = React.useState(false);
 
   const getTypeIcon = () => {
     switch (memory.type) {
@@ -88,19 +89,31 @@ function MemoryCard({ memory }: { memory: any }) {
         )}
 
         {memory.type === "photo" && (
-          <TouchableOpacity style={styles.memoryPhotoBox} onPress={() => { }}>
-            {memory.content ? (
-              <Image source={{ uri: memory.content }} style={styles.memoryPhotoPreviewImage} />
-            ) : (
-              <View style={styles.memoryPhotoPreview}>
-                <Feather name="image" size={28} color="#fff" />
+          <>
+            <TouchableOpacity style={styles.memoryPhotoBox} onPress={() => setShowPhoto(true)}>
+              {memory.content ? (
+                <Image source={{ uri: memory.content }} style={styles.memoryPhotoPreviewImage} />
+              ) : (
+                <View style={styles.memoryPhotoPreview}>
+                  <Feather name="image" size={28} color="#fff" />
+                </View>
+              )}
+              <View style={{ flex: 1, marginLeft: 12 }}>
+                <Text style={styles.memoryPhotoTitle}>Photo Memory</Text>
+                <Text style={styles.memoryPhotoSubtitle}>Tap to view</Text>
               </View>
-            )}
-            <View style={{ flex: 1, marginLeft: 12 }}>
-              <Text style={styles.memoryPhotoTitle}>Photo Memory</Text>
-              <Text style={styles.memoryPhotoSubtitle}>Tap to view</Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+            <Modal visible={showPhoto} transparent onRequestClose={() => setShowPhoto(false)}>
+              <View style={styles.modalContainer}>
+                <TouchableOpacity style={styles.modalClose} onPress={() => setShowPhoto(false)}>
+                  <Feather name="x" size={28} color="#fff" />
+                </TouchableOpacity>
+                {memory.content && (
+                  <Image source={{ uri: memory.content }} style={styles.modalImage} resizeMode="contain" />
+                )}
+              </View>
+            </Modal>
+          </>
         )}
 
         {/* Mood at the bottom */}
@@ -267,6 +280,14 @@ const makeStyles = (c: ReturnType<typeof useTheme>["colors"]) => StyleSheet.crea
     fontSize: 13,
     marginBottom: 2,
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: { width: "90%", height: "80%" },
+  modalClose: { position: "absolute", top: 40, right: 20 },
   memoryMoodRow: { marginTop: 14, borderTopWidth: 1, borderTopColor: c.border, paddingTop: 8 },
   memoryMoodText: { color: c.secondaryText, fontSize: 13 },
 });
