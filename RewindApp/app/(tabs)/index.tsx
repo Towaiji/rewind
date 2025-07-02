@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import { useTheme } from "../contexts/ThemeContext";
 import { useMemories } from "../../context/MemoriesContext";
 import { Audio } from "expo-av";
+import { Calendar } from "react-native-calendars";
 
 // -- MemoryCard Implementation --
 function MemoryCard({ memory }: { memory: any }) {
@@ -186,18 +187,105 @@ export default function FeedScreen() {
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
   const { memories } = useMemories();
 
+  // Add calendar modal state
+  const [calendarVisible, setCalendarVisible] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState<string | null>(null);
+
+  // (Optional) Filter memories by selectedDate, here’s a basic filter if you want:
+  const filteredMemories = selectedDate
+    ? memories.filter(m =>
+        new Date(m.timestamp).toDateString() === new Date(selectedDate).toDateString()
+      )
+    : memories;
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
-      <Header title="Today" subtitle="Your memory timeline" />
-      <FriendsLeaderboard friends={mockFriends} />
-      <View>
-        <Text style={styles.sectionTitle}>Your Memories</Text>
-        {memories.map((memory: any) => (
-          <MemoryCard key={memory.id} memory={memory} />
-        ))}
-      </View>
-      {/* DailyPrompt removed */}
-    </ScrollView>
+    <>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
+        <Header title="Today" subtitle="Your memory timeline" />
+        <FriendsLeaderboard friends={mockFriends} />
+        {/* --- Section Title + Button Row --- */}
+        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
+          <Text style={styles.sectionTitle}>Your Memories</Text>
+          <TouchableOpacity
+            style={{
+              marginLeft: 8,
+              backgroundColor: colors.card,
+              padding: 8,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: colors.border,
+              flexDirection: "row",
+              alignItems: "center"
+            }}
+            onPress={() => setCalendarVisible(true)}
+          >
+            <Feather name="calendar" size={18} color={colors.accent} />
+            <Text style={{ marginLeft: 6, color: colors.accent, fontWeight: "600" }}>Pick Date</Text>
+          </TouchableOpacity>
+        </View>
+        {/* --- Memories List --- */}
+        <View>
+          {filteredMemories.map((memory: any) => (
+            <MemoryCard key={memory.id} memory={memory} />
+          ))}
+        </View>
+      </ScrollView>
+
+      {/* --- Calendar Modal --- */}
+      <Modal visible={calendarVisible} transparent animationType="slide">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: colors.card,
+              borderRadius: 16,
+              padding: 20,
+              width: "90%",
+              maxWidth: 400
+            }}
+          >
+            <Text style={{ fontWeight: "bold", fontSize: 18, marginBottom: 16 }}>Pick a Day</Text>
+            <Calendar
+              onDayPress={day => {
+                setSelectedDate(day.dateString);
+                setCalendarVisible(false);
+              }}
+              markedDates={
+                selectedDate
+                  ? {
+                      [selectedDate]: {
+                        selected: true,
+                        disableTouchEvent: true,
+                        selectedColor: "#6366f1"
+                      }
+                    }
+                  : undefined
+              }
+              style={{ borderRadius: 12 }}
+            />
+            <TouchableOpacity
+              onPress={() => setCalendarVisible(false)}
+              style={{
+                marginTop: 16,
+                alignSelf: "flex-end",
+                paddingHorizontal: 12,
+                paddingVertical: 8,
+                borderRadius: 8,
+                backgroundColor: "#f3f4f6"
+              }}
+            >
+              <Text style={{ color: "#374151", fontWeight: "bold" }}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 }
 
