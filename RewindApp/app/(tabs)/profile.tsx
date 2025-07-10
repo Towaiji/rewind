@@ -130,7 +130,7 @@ export default function ProfileScreen() {
       {profile && <ProfileStats user={profile} />}
 
       <View>
-        <Text style={styles.progressTitle}>Progress</Text>
+        <Text style={styles.progressTitle}>Achievements</Text>
         {mockAchievements.map((achievement: any) => (
           <AchievementCard key={achievement.id} achievement={achievement} />
         ))}
