@@ -45,23 +45,27 @@ function ProfileStats({ user }: { user: any }) {
       </View>
       <View style={styles.profileWrap}>
         <View style={styles.wrapHeaderRow}>
-          <Text style={styles.wrapHeader}>This Year's Wrap</Text>
+          <Text style={styles.wrapHeader}>This Month's Rewind</Text>
           <TouchableOpacity>
             <Text style={styles.wrapViewAll}>View All</Text>
           </TouchableOpacity>
         </View>
         <View style={{ gap: 6 }}>
           <View style={styles.wrapRow}>
-            <Text style={styles.wrapLabel}>Most visited place:</Text>
-            <Text style={styles.wrapValue}>Coffee shops ☕</Text>
+            <Text style={styles.wrapLabel}>Catchphrase:</Text>
+            <Text style={styles.wrapValue}>"Nah fr bro"</Text>
           </View>
           <View style={styles.wrapRow}>
-            <Text style={styles.wrapLabel}>Favorite mood:</Text>
-            <Text style={styles.wrapValue}>Grateful 🙏</Text>
+            <Text style={styles.wrapLabel}>Visited place:</Text>
+            <Text style={styles.wrapValue}>Coleman Ent. Center</Text>
           </View>
           <View style={styles.wrapRow}>
             <Text style={styles.wrapLabel}>Memory type:</Text>
             <Text style={styles.wrapValue}>Voice notes 🎤</Text>
+          </View>
+          <View style={styles.wrapRow}>
+            <Text style={styles.wrapLabel}>Food:</Text>
+            <Text style={styles.wrapValue}>Steak</Text>
           </View>
         </View>
       </View>
