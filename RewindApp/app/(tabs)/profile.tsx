@@ -117,13 +117,13 @@ function AchievementCard({ achievement }: { achievement: any }) {
 
 export default function ProfileScreen() {
   const { colors, toggleTheme } = useTheme();
-  const { signOut } = useAuth();
+  const { signOut, profile } = useAuth();
   const styles = React.useMemo(() => makeStyles(colors), [colors]);
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 80 }}>
-      <Header title="Profile" subtitle={`${mockUser.streakDays} day streak`} />
+      <Header title="Profile" subtitle={`${profile?.streakDays ?? 0} day streak`} />
 
-      <ProfileStats user={mockUser} />
+      {profile && <ProfileStats user={profile} />}
 
       <View>
         <Text style={styles.progressTitle}>Progress</Text>

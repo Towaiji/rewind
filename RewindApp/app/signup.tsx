@@ -9,10 +9,12 @@ export default function SignUpScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const { colors } = useTheme();
 
   const handleSignUp = async () => {
-    const { error } = (await signUp(email, password)) as any;
+    const { error } = (await signUp(email, password, name, username)) as any;
     if (error) {
       alert(error.message);
     } else {
@@ -30,6 +32,21 @@ export default function SignUpScreen() {
         autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
+      />
+      <TextInput
+        style={[styles.input, { borderColor: colors.border, color: colors.text }]}
+        placeholder="Name"
+        placeholderTextColor={colors.secondaryText}
+        value={name}
+        onChangeText={setName}
+      />
+      <TextInput
+        style={[styles.input, { borderColor: colors.border, color: colors.text }]}
+        placeholder="Username"
+        placeholderTextColor={colors.secondaryText}
+        autoCapitalize="none"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
         style={[styles.input, { borderColor: colors.border, color: colors.text }]}
